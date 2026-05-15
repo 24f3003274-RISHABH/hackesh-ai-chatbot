@@ -53,22 +53,27 @@ function App() {
     }
   };
 
-  const handleRename = async (id) => {
-    if (!renameValue.trim()) return;
+const handleRename = async (id) => {
+  if (!renameValue.trim()) return;
 
-    try {
-      await axios.put(`${API_URL}/api/chats/${id}/rename`, {
-        title: renameValue,
-      });
+  try {
+    const res = await axios.put(`${API_URL}/api/chats/${id}/rename`, {
+      title: renameValue,
+    });
 
-      setRenameId(null);
-      setRenameValue("");
-      fetchChats();
-    } catch (error) {
-      console.log("Rename error:", error);
-    }
-  };
+    setChatHistory((prev) =>
+      prev.map((chat) =>
+        chat._id === id ? { ...chat, title: res.data.title } : chat
+      )
+    );
 
+    setRenameId(null);
+    setRenameValue("");
+  } catch (error) {
+    console.log("Rename error:", error.response?.data || error.message);
+    alert(error.response?.data?.message || "Rename failed");
+  }
+};
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -160,13 +165,26 @@ function App() {
                     <input
                       value={renameValue}
                       onChange={(e) => setRenameValue(e.target.value)}
+                      onClick={(e) => e.stopPropagation()}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") handleRename(chat._id);
+                        if (e.key === "Enter") {
+                          e.stopPropagation();
+                          handleRename(chat._id);
+                        }
                       }}
                       autoFocus
                     />
 
-                    <button onClick={() => handleRename(chat._id)}>✓</button>
+                    <button
+                      type="button"
+                      className="rename-save-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRename(chat._id);
+                      }}
+                    >
+                      ✓
+                    </button>
                   </div>
                 ) : (
                   <>

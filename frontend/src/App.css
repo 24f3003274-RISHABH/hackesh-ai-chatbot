@@ -340,3 +340,18 @@ body {
 .markdown-answer strong {
   color: #67e8f9;
 }
+
+
+.rename-save-btn {
+  min-width: 52px !important;
+  height: 44px;
+  padding: 0 !important;
+  border-radius: 14px !important;
+  background: linear-gradient(90deg, #7c3aed, #06b6d4) !important;
+  color: white !important;
+  font-size: 22px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
