@@ -1,4 +1,7 @@
+
 # 🤖 Hackesh AI Chatbot
+
+![Hackesh AI Chatbot UI](frontend/public/screenshot.png)
 
 A full-stack conversational AI application built with modern web technologies. Features real-time chat interactions, persistent message storage, and a responsive React frontend with Express.js backend.
 
