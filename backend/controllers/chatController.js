@@ -3,9 +3,19 @@ const Chat = require("../models/Chat");
 
 const callGeminiAI = async (message) => {
   const prompt = `
-You are Hackesh AI ChatBot, a helpful and intelligent assistant.
+You are Hackesh AI ChatBot.
 
-Answer clearly, professionally, and practically.
+Answer like a smart, modern, student-friendly AI assistant.
+
+Rules:
+- Do not give one big paragraph.
+- Use short paragraphs.
+- Use clean headings.
+- Use bullet points where useful.
+- Explain step-by-step when needed.
+- Keep tone clear, confident, and helpful.
+- Avoid robotic or copy-paste style.
+- Format answer in Markdown.
 
 User message:
 ${message}
@@ -41,7 +51,7 @@ const sendMessage = async (req, res) => {
 
     if (!chat) {
       chat = await Chat.create({
-        title: message.slice(0, 30),
+        title: message.slice(0, 35),
         messages: [],
       });
     }
@@ -77,7 +87,10 @@ const sendMessage = async (req, res) => {
 
 const getChats = async (req, res) => {
   try {
-    const chats = await Chat.find().sort({ createdAt: -1 });
+    const chats = await Chat.find()
+      .select("title createdAt updatedAt")
+      .sort({ updatedAt: -1 });
+
     res.status(200).json(chats);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -98,8 +111,33 @@ const getSingleChat = async (req, res) => {
   }
 };
 
+const renameChat = async (req, res) => {
+  try {
+    const { title } = req.body;
+
+    if (!title) {
+      return res.status(400).json({ message: "Title is required" });
+    }
+
+    const chat = await Chat.findByIdAndUpdate(
+      req.params.id,
+      { title },
+      { new: true }
+    );
+
+    if (!chat) {
+      return res.status(404).json({ message: "Chat not found" });
+    }
+
+    res.status(200).json(chat);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   sendMessage,
   getChats,
   getSingleChat,
+  renameChat,
 };

@@ -115,7 +115,7 @@ body {
 }
 
 .message {
-  max-width: 70%;
+  max-width: 78%;
   padding: 16px;
   border-radius: 16px;
 }
@@ -184,4 +184,159 @@ body {
 .messages::-webkit-scrollbar-thumb {
   background: linear-gradient(#7c3aed, #06b6d4);
   border-radius: 20px;
+}
+
+
+.markdown-answer {
+  text-align: left;
+}
+
+.markdown-answer h1,
+.markdown-answer h2,
+.markdown-answer h3 {
+  margin: 12px 0 8px;
+  color: #ffffff;
+}
+
+.markdown-answer p {
+  margin: 8px 0;
+  line-height: 1.7;
+  color: #e5e7eb;
+}
+
+.markdown-answer ul,
+.markdown-answer ol {
+  padding-left: 22px;
+  margin: 10px 0;
+}
+
+.markdown-answer li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+
+.markdown-answer strong {
+  color: #67e8f9;
+}
+
+.markdown-answer code {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 3px 6px;
+  border-radius: 6px;
+  color: #fde68a;
+}
+
+.assistant {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+
+.new-chat-btn {
+  margin-bottom: 20px;
+}
+
+.history-section {
+  margin-top: 25px;
+}
+
+.history-section h3 {
+  font-size: 16px;
+  color: #cbd5e1;
+  margin-bottom: 12px;
+}
+
+.empty-history {
+  color: #64748b;
+  font-size: 14px;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.history-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.history-item p {
+  margin: 0;
+  color: #e5e7eb;
+  font-size: 14px;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.active-chat {
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.4), rgba(6, 182, 212, 0.25));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.rename-btn {
+  background: transparent !important;
+  color: #94a3b8 !important;
+  padding: 4px 6px !important;
+  width: auto !important;
+  border-radius: 8px !important;
+  font-size: 13px;
+}
+
+.rename-btn:hover {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.rename-box {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.rename-box input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+}
+
+.rename-box button {
+  width: auto !important;
+  padding: 6px 10px !important;
+  border-radius: 8px !important;
+}
+
+.markdown-answer {
+  text-align: left;
+}
+
+.markdown-answer p {
+  margin: 8px 0;
+  line-height: 1.7;
+}
+
+.markdown-answer ul,
+.markdown-answer ol {
+  padding-left: 22px;
+}
+
+.markdown-answer li {
+  margin-bottom: 8px;
+}
+
+.markdown-answer strong {
+  color: #67e8f9;
 }

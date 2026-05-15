@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 import "./App.css";
 
 function App() {
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -13,6 +16,58 @@ function App() {
   const [input, setInput] = useState("");
   const [chatId, setChatId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [chatHistory, setChatHistory] = useState([]);
+  const [renameId, setRenameId] = useState(null);
+  const [renameValue, setRenameValue] = useState("");
+
+  const fetchChats = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/api/chats`);
+      setChatHistory(res.data);
+    } catch (error) {
+      console.log("Fetch chat history error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchChats();
+  }, []);
+
+  const startNewChat = () => {
+    setChatId(null);
+    setMessages([
+      {
+        role: "assistant",
+        text: "New chat started. Ask me anything.",
+      },
+    ]);
+  };
+
+  const openChat = async (id) => {
+    try {
+      const res = await axios.get(`${API_URL}/api/chats/${id}`);
+      setChatId(res.data._id);
+      setMessages(res.data.messages);
+    } catch (error) {
+      console.log("Open chat error:", error);
+    }
+  };
+
+  const handleRename = async (id) => {
+    if (!renameValue.trim()) return;
+
+    try {
+      await axios.put(`${API_URL}/api/chats/${id}/rename`, {
+        title: renameValue,
+      });
+
+      setRenameId(null);
+      setRenameValue("");
+      fetchChats();
+    } catch (error) {
+      console.log("Rename error:", error);
+    }
+  };
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -29,13 +84,10 @@ function App() {
     setLoading(true);
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/chats/message`,
-        {
-          message: currentInput,
-          chatId,
-        }
-      );
+      const res = await axios.post(`${API_URL}/api/chats/message`, {
+        message: currentInput,
+        chatId,
+      });
 
       setChatId(res.data.chatId);
 
@@ -46,9 +98,9 @@ function App() {
           text: res.data.reply,
         },
       ]);
-    } catch (error) {
-      console.log("Frontend error:", error);
 
+      fetchChats();
+    } catch (error) {
       setMessages((prev) => [
         ...prev,
         {
@@ -80,23 +132,59 @@ function App() {
         <aside className="sidebar">
           <h2>⚡ Hackesh AI</h2>
 
-          <button
-            onClick={() => {
-              setMessages([
-                {
-                  role: "assistant",
-                  text: "New chat started. Ask me anything.",
-                },
-              ]);
-              setChatId(null);
-            }}
-          >
+          <button className="new-chat-btn" onClick={startNewChat}>
             + New Chat
           </button>
 
           <div className="sidebar-info">
             <p>AI Assistant</p>
             <span>Powered by Gemini</span>
+          </div>
+
+          <div className="history-section">
+            <h3>Chat History</h3>
+
+            {chatHistory.length === 0 && (
+              <p className="empty-history">No chats yet</p>
+            )}
+
+            {chatHistory.map((chat) => (
+              <div
+                key={chat._id}
+                className={`history-item ${
+                  chatId === chat._id ? "active-chat" : ""
+                }`}
+              >
+                {renameId === chat._id ? (
+                  <div className="rename-box">
+                    <input
+                      value={renameValue}
+                      onChange={(e) => setRenameValue(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleRename(chat._id);
+                      }}
+                      autoFocus
+                    />
+
+                    <button onClick={() => handleRename(chat._id)}>✓</button>
+                  </div>
+                ) : (
+                  <>
+                    <p onClick={() => openChat(chat._id)}>{chat.title}</p>
+
+                    <button
+                      className="rename-btn"
+                      onClick={() => {
+                        setRenameId(chat._id);
+                        setRenameValue(chat.title);
+                      }}
+                    >
+                      ✎
+                    </button>
+                  </>
+                )}
+              </div>
+            ))}
           </div>
         </aside>
 
@@ -122,7 +210,10 @@ function App() {
                   <span className="role">
                     {msg.role === "user" ? "You" : "Hackesh AI"}
                   </span>
-                  <p>{msg.text}</p>
+
+                  <div className="markdown-answer">
+                    <ReactMarkdown>{msg.text}</ReactMarkdown>
+                  </div>
                 </div>
               </div>
             ))}
