@@ -17,6 +17,12 @@ A full-stack conversational AI application built with modern web technologies. F
 
 ---
 
+## 🔗 Live Demo
+
+- **Frontend (Live):** [https://hackesh-ai-chatbot.vercel.app/](https://hackesh-ai-chatbot.vercel.app/)
+- **Backend (API):** [https://hackesh-ai-chatbot.onrender.com/](https://hackesh-ai-chatbot.onrender.com/)
+
+
 ## 📋 Table of Contents
 
 - [Features](#features)
